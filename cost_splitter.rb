@@ -88,8 +88,8 @@ CSV.open("#{event_name}_output.csv", "wb") do |csv|
     room_cost = person[:room_cost] * TAX_AND_TIPS_MULTIPLIER
     drinks_cost = person[:drinks_cost] * TAX_AND_TIPS_MULTIPLIER
     total_cost = room_cost + drinks_cost
-    venmo_link = make_venmo_link(total_cost, event_name)
-    square_cash_link = make_square_cash_link(total_cost)
+    venmo_link = make_venmo_link(total_cost.round(2), event_name)
+    square_cash_link = make_square_cash_link(total_cost.round(2))
     csv << [name, room_time, dollarfy(room_cost), dollarfy(drinks_cost), dollarfy(total_cost), venmo_link, square_cash_link]
   end
 end
