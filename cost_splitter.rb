@@ -82,7 +82,7 @@ def make_square_cash_link(amount)
 end
 
 CSV.open("#{event_name}_output.csv", "wb") do |csv|
-  csv << ['Name', 'Room time', 'Room $', 'Drinks $', 'Total $', 'Pay with Venmo', 'Pay with Square Cash']
+  csv << ['Name', 'Room time', 'Room $', 'Drinks $', 'Total $', 'Pay with Venmo', 'Pay with Square Cash', 'I paid! (y/n)']
   people.each do |name, person|
     room_time = person[:room_time]
     room_cost = person[:room_cost] * TAX_AND_TIPS_MULTIPLIER
