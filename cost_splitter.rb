@@ -7,7 +7,7 @@ require 'csv'
 VENMO_USERNAME = 'Sandy-Wu'
 SQUARE_CASH_USERNAME = '$SandyWu'
 
-# Try to use pre taxs and tips in internal computations.
+# Try to not use pre taxs and tips in internal computations.
 TAX_AND_TIPS_MULTIPLIER = 1 + 0.0875 + 0.18
 
 DRINKS = {
