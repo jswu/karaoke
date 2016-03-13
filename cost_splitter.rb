@@ -1,4 +1,11 @@
+# For computing karaoke receipts.
+# Example:
+#   ruby cost_splitter 2016_02_26 460 324
+# Import .csv into Google Spreadsheets, then share the spreadsheet!
 require 'csv'
+
+VENMO_USERNAME = 'Sandy-Wu'
+SQUARE_CASH_USERNAME = '$SandyWu'
 
 # Try to use pre taxs and tips in internal computations.
 TAX_AND_TIPS_MULTIPLIER = 1 + 0.0875 + 0.18
@@ -10,6 +17,8 @@ DRINKS = {
 }
 
 cost_file_name = ARGV[0]
+event_name = cost_file_name.split('.')[0]
+
 total_cost_pre_tt = ARGV[1].to_f
 room_cost_pre_tt = ARGV[2].to_f
 drinks_cost_pre_tt = total_cost_pre_tt - room_cost_pre_tt
@@ -63,13 +72,24 @@ def dollarfy(amount)
   "$#{amount.round(2)}"
 end
 
-CSV.open("#{cost_file_name}_output.csv", "wb") do |csv|
-  csv << ['Name', 'Room time', 'Room $', 'Drinks $', 'Total $']
+
+def make_venmo_link(amount, event_name)
+  "https://venmo.com/?txn=pay&share=private&recipients=#{VENMO_USERNAME}&amount=#{amount}&note=#{event_name}%20karaoke"
+end
+
+def make_square_cash_link(amount)
+  "https://cash.me/#{SQUARE_CASH_USERNAME}/#{amount}"
+end
+
+CSV.open("#{event_name}_output.csv", "wb") do |csv|
+  csv << ['Name', 'Room time', 'Room $', 'Drinks $', 'Total $', 'Pay with Venmo', 'Pay with Square Cash']
   people.each do |name, person|
     room_time = person[:room_time]
     room_cost = person[:room_cost] * TAX_AND_TIPS_MULTIPLIER
     drinks_cost = person[:drinks_cost] * TAX_AND_TIPS_MULTIPLIER
     total_cost = room_cost + drinks_cost
-    csv << [name, room_time, dollarfy(room_cost), dollarfy(drinks_cost), dollarfy(total_cost)]
+    venmo_link = make_venmo_link(total_cost, event_name)
+    square_cash_link = make_square_cash_link(total_cost)
+    csv << [name, room_time, dollarfy(room_cost), dollarfy(drinks_cost), dollarfy(total_cost), venmo_link, square_cash_link]
   end
 end
