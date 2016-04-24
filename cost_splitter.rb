@@ -1,4 +1,6 @@
 # For computing karaoke receipts.
+# Usage:
+#   ruby cost_splitter EVENT_NAME TOTAL_COST_PRE_TAX_TIP ROOM_COST_PRE_TAX_TIP
 # Example:
 #   ruby cost_splitter 2016_02_26 460 324
 # Import .csv into Google Spreadsheets, then share the spreadsheet!
@@ -43,6 +45,10 @@ File.open(cost_file_name, 'r') do |cost_file|
     name = tokens[0]
     tokens = tokens.drop(1)
 
+    # TODO(sandy): Instead of computing absolute total drinks cost, should
+    # perhaps instead split the sum of the drink costs by each person,
+    # proportionally. This will help account for stray items that were
+    # unaccounted for.
     drinks_cost = tokens.inject(0){|memo, token| memo + DRINKS[token.to_sym]}
     actual_total_drinks_cost += drinks_cost
 
