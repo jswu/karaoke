@@ -33,8 +33,11 @@ actual_total_drinks_cost = 0
 File.open(cost_file_name, 'r') do |cost_file|
   cost_file.each_line do |line|
     tokens = line.split(' ')
+    name = tokens[0]
+    raise "Duplicate name exists: #{name}" if people.has_key?(name)
 
     begin
+      # Expect the last number to be the room time fraction
       room_time = Float(tokens[-1])
       tokens = tokens[0...-1]
     rescue
@@ -42,7 +45,6 @@ File.open(cost_file_name, 'r') do |cost_file|
     end
     actual_total_room_time += room_time
 
-    name = tokens[0]
     tokens = tokens.drop(1)
 
     # TODO(sandy): Instead of computing absolute total drinks cost, should
