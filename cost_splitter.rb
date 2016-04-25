@@ -1,8 +1,8 @@
 # For computing karaoke receipts.
 # Usage:
-#   ruby cost_splitter EVENT_NAME TOTAL_COST_PRE_TAX_TIP ROOM_COST_PRE_TAX_TIP
+#   ruby cost_splitter COST_FILE_NAME TOTAL_COST_PRE_TAX_TIP ROOM_COST_PRE_TAX_TIP
 # Example:
-#   ruby cost_splitter 2016_02_26 460 324
+#   ruby cost_splitter 2016_02_26.txt 460 324
 # Import .csv into Google Spreadsheets, then share the spreadsheet!
 require 'csv'
 
@@ -49,7 +49,9 @@ File.open(cost_file_name, 'r') do |cost_file|
     # perhaps instead split the sum of the drink costs by each person,
     # proportionally. This will help account for stray items that were
     # unaccounted for.
-    drinks_cost = tokens.inject(0){|memo, token| memo + DRINKS[token.to_sym]}
+    drinks_cost = tokens.inject(0) do |memo, token|
+      memo + DRINKS.fetch(token.to_sym)
+    end
     actual_total_drinks_cost += drinks_cost
 
     people[name] = {
