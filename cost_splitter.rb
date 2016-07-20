@@ -1,8 +1,8 @@
 # For computing karaoke receipts.
 # Usage:
-#   ruby cost_splitter COST_FILE_NAME TOTAL_COST_PRE_TAX_TIP ROOM_COST_PRE_TAX_TIP
+#   ruby cost_splitter.rb COST_FILE_NAME TOTAL_COST_PRE_TAX_TIP ROOM_COST_PRE_TAX_TIP
 # Example:
-#   ruby cost_splitter 2016_02_26.txt 460 324
+#   ruby cost_splitter.rb 2016_02_26.txt 460 324
 # Import .csv into Google Spreadsheets, then share the spreadsheet!
 require 'csv'
 
@@ -13,9 +13,14 @@ SQUARE_CASH_USERNAME = '$SandyWu'
 TAX_AND_TIPS_MULTIPLIER = 1 + 0.0875 + 0.18
 
 DRINKS = {
+    # Beer
     b: 5,
+    # Tequila
     t: 6,
+    # Peach delight
     pd: 12,
+    # Coke (estimate, unsure)
+    ck: 5,
 }
 
 cost_file_name = ARGV[0]
@@ -92,7 +97,7 @@ def make_square_cash_link(amount)
 end
 
 CSV.open("#{event_name}_output.csv", "wb") do |csv|
-  csv << ['Name', 'Room time', 'Room $', 'Drinks $', 'Total $ (PAY THIS AMOUNT)', 'Pay with Venmo', 'Pay with Square Cash', 'I paid! (y/n)']
+  csv << ['Name', 'Room time', 'Room $', 'Drinks $', '*** Total $ (PAY THIS AMOUNT) *** (use links for convenience --->)', 'Pay with Venmo', 'Pay with Square Cash', 'I paid! (y/n)']
   people.each do |name, person|
     room_time = person[:room_time]
     room_cost = person[:room_cost] * TAX_AND_TIPS_MULTIPLIER
